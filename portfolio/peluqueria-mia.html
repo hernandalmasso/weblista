@@ -14,82 +14,233 @@
         }}}
     </script>
     <style>
-        .hero-bg { background: linear-gradient(135deg, #FFF1F2 0%, #FFE4E6 50%, #FECDD3 100%); }
+        .hero-bg {
+            background: linear-gradient(135deg, #FFF1F2 0%, #FFE4E6 50%, #FECDD3 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
         .glass { background: rgba(255,255,255,.75); backdrop-filter: blur(12px); border: 1px solid rgba(0,0,0,.06); }
-        .card { transition: transform .3s ease, box-shadow .3s ease; }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -16px rgba(244,63,94,.25); }
+
+        /* Scroll animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-left.visible { opacity: 1; transform: translateX(0); }
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-right.visible { opacity: 1; transform: translateX(0); }
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.85);
+            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+        /* Stagger delays */
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+        .delay-5 { transition-delay: 0.5s; }
+
+        /* Hero entrance */
+        @keyframes heroFadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hero-animate { animation: heroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        .hero-delay-1 { animation-delay: 0.2s; }
+        .hero-delay-2 { animation-delay: 0.4s; }
+        .hero-delay-3 { animation-delay: 0.6s; }
+        .hero-delay-4 { animation-delay: 0.8s; }
+
+        /* Cards */
+        .card {
+            transition: transform .4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .4s ease;
+        }
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(244,63,94,.25);
+        }
+        .card .icon {
+            transition: transform .4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .card:hover .icon {
+            transform: scale(1.2) rotate(-5deg);
+        }
+
+        /* Nav link underline */
+        .nav-link { position: relative; }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #E11D48;
+            transition: width .3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* CTA pulse */
+        .cta-pulse {
+            position: relative;
+            overflow: visible;
+        }
+        .cta-pulse::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 9999px;
+            background: rgba(244,63,94,.3);
+            animation: pulse 2s ease-in-out infinite;
+            z-index: -1;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0; }
+            50% { transform: scale(1.08); opacity: 1; }
+        }
+
+        /* WhatsApp bounce */
+        .wa-float {
+            animation: waBounce 2s ease-in-out infinite;
+        }
+        @keyframes waBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        .wa-float:hover { animation: none; transform: scale(1.15); }
+
+        /* Counter animation */
+        .counter { display: inline-block; }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #E11D48, #F43F5E, #FB7185);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Floating particles */
+        .particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: rgba(244,63,94,.15);
+            border-radius: 50%;
+            animation: floatParticle linear infinite;
+        }
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+        }
     </style>
 </head>
-<body class="bg-white text-slate-800 antialiased">
+<body class="bg-white text-slate-800 antialiased overflow-x-hidden">
 
     <!-- Nav -->
-    <nav class="fixed w-full z-40 glass px-6 py-4 flex justify-between items-center">
+    <nav class="fixed w-full z-40 glass px-6 py-4 flex justify-between items-center transition-all duration-500" id="nav">
         <a href="#" class="font-display text-2xl font-bold text-brand-700">Mía</a>
         <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
-            <a href="#servicios" class="hover:text-brand-600 transition">Servicios</a>
-            <a href="#nosotras" class="hover:text-brand-600 transition">Nosotras</a>
-            <a href="#contacto" class="hover:text-brand-600 transition">Contacto</a>
+            <a href="#servicios" class="nav-link hover:text-brand-600 transition">Servicios</a>
+            <a href="#nosotras" class="nav-link hover:text-brand-600 transition">Nosotras</a>
+            <a href="#contacto" class="nav-link hover:text-brand-600 transition">Contacto</a>
         </div>
         <a href="https://wa.me/5491100000000?text=Hola!%20Quiero%20sacar%20turno" target="_blank" rel="noopener"
-           class="bg-brand-600 hover:bg-brand-500 text-white px-5 py-2 rounded-full font-semibold text-sm transition">
+           class="bg-brand-600 hover:bg-brand-500 text-white px-5 py-2 rounded-full font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-brand-200 hover:-translate-y-0.5">
             Sacar turno
         </a>
     </nav>
 
     <!-- Hero -->
-    <section class="hero-bg min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20">
-        <p class="text-brand-600 font-semibold text-sm tracking-widest uppercase mb-4">Peluquería & Estética</p>
-        <h1 class="font-display text-5xl md:text-7xl font-bold text-slate-900 mb-6 max-w-3xl leading-tight">
-            Tu mejor versión empieza acá.
+    <section class="hero-bg min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20 relative">
+        <div class="particles" id="particles"></div>
+        <p class="hero-animate hero-delay-1 text-brand-600 font-semibold text-sm tracking-widest uppercase mb-4">Peluquería & Estética</p>
+        <h1 class="hero-animate hero-delay-2 font-display text-5xl md:text-7xl font-bold text-slate-900 mb-6 max-w-3xl leading-tight">
+            Tu mejor versión <span class="gradient-text">empieza acá.</span>
         </h1>
-        <p class="text-lg text-slate-600 max-w-xl mb-10">
+        <p class="hero-animate hero-delay-3 text-lg text-slate-600 max-w-xl mb-10">
             Corte, color, tratamientos capilares y más. En Villa Pueyrredón, con turnos flexibles y atención personalizada.
         </p>
         <a href="https://wa.me/5491100000000?text=Hola!%20Quiero%20sacar%20turno" target="_blank" rel="noopener"
-           class="bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-full font-bold text-lg transition shadow-lg shadow-brand-200">
+           class="hero-animate hero-delay-4 cta-pulse bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:shadow-xl hover:shadow-brand-200 hover:-translate-y-1">
             Sacá tu turno por WhatsApp
         </a>
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 hero-animate hero-delay-4">
+            <div class="w-6 h-10 border-2 border-brand-300 rounded-full flex justify-center pt-2">
+                <div class="w-1.5 h-3 bg-brand-400 rounded-full animate-bounce"></div>
+            </div>
+        </div>
     </section>
 
     <!-- Servicios -->
     <section id="servicios" class="py-24 px-6 max-w-6xl mx-auto scroll-mt-20">
-        <h2 class="font-display text-3xl md:text-5xl font-bold text-center mb-4">Nuestros servicios</h2>
-        <p class="text-slate-500 text-center mb-16 max-w-xl mx-auto">Todo lo que necesitás para tu pelo, en un solo lugar.</p>
+        <h2 class="reveal font-display text-3xl md:text-5xl font-bold text-center mb-4">Nuestros servicios</h2>
+        <p class="reveal delay-1 text-slate-500 text-center mb-16 max-w-xl mx-auto">Todo lo que necesitás para tu pelo, en un solo lugar.</p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="card bg-brand-50 p-8 rounded-2xl">
-                <div class="text-4xl mb-4">✂️</div>
-                <h3 class="text-xl font-bold mb-2">Corte</h3>
+            <div class="reveal delay-1 card bg-brand-50 p-8 rounded-2xl group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">✂️</div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-brand-600 transition-colors">Corte</h3>
                 <p class="text-slate-600 mb-4">Corte personalizado según tu estilo y tipo de pelo. Incluye lavado y secado.</p>
                 <p class="text-brand-600 font-bold text-lg">Desde $5.500</p>
             </div>
-            <div class="card bg-brand-50 p-8 rounded-2xl">
-                <div class="text-4xl mb-4">🎨</div>
-                <h3 class="text-xl font-bold mb-2">Color & Mechas</h3>
+            <div class="reveal delay-2 card bg-brand-50 p-8 rounded-2xl group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">🎨</div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-brand-600 transition-colors">Color & Mechas</h3>
                 <p class="text-slate-600 mb-4">Balayage, mechas, color completo. Usamos productos de primera línea.</p>
                 <p class="text-brand-600 font-bold text-lg">Desde $12.000</p>
             </div>
-            <div class="card bg-brand-50 p-8 rounded-2xl">
-                <div class="text-4xl mb-4">💆</div>
-                <h3 class="text-xl font-bold mb-2">Tratamientos</h3>
+            <div class="reveal delay-3 card bg-brand-50 p-8 rounded-2xl group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">💆</div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-brand-600 transition-colors">Tratamientos</h3>
                 <p class="text-slate-600 mb-4">Keratina, botox capilar, hidratación profunda. Tu pelo lo va a agradecer.</p>
                 <p class="text-brand-600 font-bold text-lg">Desde $8.000</p>
             </div>
-            <div class="card bg-brand-50 p-8 rounded-2xl">
-                <div class="text-4xl mb-4">💅</div>
-                <h3 class="text-xl font-bold mb-2">Manicura</h3>
+            <div class="reveal delay-1 card bg-brand-50 p-8 rounded-2xl group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">💅</div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-brand-600 transition-colors">Manicura</h3>
                 <p class="text-slate-600 mb-4">Semipermanente, esculpidas, nail art. Manos impecables siempre.</p>
                 <p class="text-brand-600 font-bold text-lg">Desde $4.500</p>
             </div>
-            <div class="card bg-brand-50 p-8 rounded-2xl">
-                <div class="text-4xl mb-4">👰</div>
-                <h3 class="text-xl font-bold mb-2">Novias & Eventos</h3>
+            <div class="reveal delay-2 card bg-brand-50 p-8 rounded-2xl group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">👰</div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-brand-600 transition-colors">Novias & Eventos</h3>
                 <p class="text-slate-600 mb-4">Peinado + maquillaje para tu día especial. También hacemos pruebas previas.</p>
                 <p class="text-brand-600 font-bold text-lg">Consultar</p>
             </div>
-            <div class="card bg-brand-50 p-8 rounded-2xl">
-                <div class="text-4xl mb-4">🧴</div>
-                <h3 class="text-xl font-bold mb-2">Alisado</h3>
+            <div class="reveal delay-3 card bg-brand-50 p-8 rounded-2xl group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">🧴</div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-brand-600 transition-colors">Alisado</h3>
                 <p class="text-slate-600 mb-4">Alisado definitivo y progresivo. Resultados que duran meses.</p>
                 <p class="text-brand-600 font-bold text-lg">Desde $15.000</p>
             </div>
@@ -97,25 +248,25 @@
     </section>
 
     <!-- Nosotras -->
-    <section id="nosotras" class="py-24 px-6 bg-brand-50">
+    <section id="nosotras" class="py-24 px-6 bg-brand-50 overflow-hidden">
         <div class="max-w-4xl mx-auto text-center">
-            <h2 class="font-display text-3xl md:text-5xl font-bold mb-6">Sobre nosotras</h2>
-            <p class="text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto mb-8">
+            <h2 class="reveal font-display text-3xl md:text-5xl font-bold mb-6">Sobre nosotras</h2>
+            <p class="reveal delay-1 text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto mb-8">
                 Somos un equipo de estilistas con más de 10 años de experiencia. Nos apasiona lo que hacemos
                 y creemos que cada persona merece sentirse bien con su pelo. Te esperamos en nuestro salón
                 de Villa Pueyrredón, con ambiente cálido y atención de primera.
             </p>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-12">
-                <div class="text-center">
-                    <p class="text-4xl font-bold text-brand-600">10+</p>
+                <div class="reveal-scale delay-1 text-center">
+                    <p class="text-4xl font-bold gradient-text counter" data-target="10">0</p><span class="text-4xl font-bold gradient-text">+</span>
                     <p class="text-slate-500 mt-1">Años de experiencia</p>
                 </div>
-                <div class="text-center">
-                    <p class="text-4xl font-bold text-brand-600">3.000+</p>
+                <div class="reveal-scale delay-2 text-center">
+                    <p class="text-4xl font-bold gradient-text counter" data-target="3000">0</p><span class="text-4xl font-bold gradient-text">+</span>
                     <p class="text-slate-500 mt-1">Clientas felices</p>
                 </div>
-                <div class="text-center">
-                    <p class="text-4xl font-bold text-brand-600">4.9 ★</p>
+                <div class="reveal-scale delay-3 text-center">
+                    <p class="text-4xl font-bold gradient-text">4.9 ★</p>
                     <p class="text-slate-500 mt-1">En Google Maps</p>
                 </div>
             </div>
@@ -124,38 +275,100 @@
 
     <!-- Horarios + Contacto -->
     <section id="contacto" class="py-24 px-6 max-w-4xl mx-auto scroll-mt-20">
-        <h2 class="font-display text-3xl md:text-5xl font-bold text-center mb-16">Vení a vernos</h2>
+        <h2 class="reveal font-display text-3xl md:text-5xl font-bold text-center mb-16">Vení a vernos</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div>
+            <div class="reveal-left">
                 <h3 class="font-bold text-xl mb-4">Horarios</h3>
                 <ul class="space-y-3 text-slate-600">
-                    <li class="flex justify-between border-b border-slate-100 pb-3"><span>Lunes a Viernes</span><span class="font-semibold text-slate-800">9:00 — 19:00</span></li>
-                    <li class="flex justify-between border-b border-slate-100 pb-3"><span>Sábados</span><span class="font-semibold text-slate-800">9:00 — 14:00</span></li>
-                    <li class="flex justify-between"><span>Domingos</span><span class="font-semibold text-slate-400">Cerrado</span></li>
+                    <li class="flex justify-between border-b border-slate-100 pb-3 hover:bg-brand-50 px-2 -mx-2 rounded transition-colors"><span>Lunes a Viernes</span><span class="font-semibold text-slate-800">9:00 — 19:00</span></li>
+                    <li class="flex justify-between border-b border-slate-100 pb-3 hover:bg-brand-50 px-2 -mx-2 rounded transition-colors"><span>Sábados</span><span class="font-semibold text-slate-800">9:00 — 14:00</span></li>
+                    <li class="flex justify-between hover:bg-brand-50 px-2 -mx-2 rounded transition-colors"><span>Domingos</span><span class="font-semibold text-slate-400">Cerrado</span></li>
                 </ul>
             </div>
-            <div>
+            <div class="reveal-right">
                 <h3 class="font-bold text-xl mb-4">Ubicación</h3>
                 <p class="text-slate-600 mb-2">Av. Salvador María del Carril 1234</p>
                 <p class="text-slate-600 mb-6">Villa Pueyrredón, CABA</p>
                 <a href="https://wa.me/5491100000000?text=Hola!%20Quiero%20sacar%20turno%20en%20Peluquer%C3%ADa%20M%C3%ADa" target="_blank" rel="noopener"
-                   class="inline-block bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-xl font-bold transition">
+                   class="inline-block bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-xl font-bold transition-all duration-300 hover:shadow-lg hover:shadow-brand-200 hover:-translate-y-1">
                     Sacar turno por WhatsApp
                 </a>
             </div>
         </div>
     </section>
 
-    <footer class="text-center py-8 text-slate-400 text-sm border-t border-slate-100">
+    <footer class="reveal text-center py-8 text-slate-400 text-sm border-t border-slate-100">
         <p>&copy; 2026 Peluquería Mía. Todos los derechos reservados.</p>
-        <p class="mt-1">Web diseñada por <a href="https://hernandalmasso.github.io/weblista/" class="text-brand-500 hover:underline" target="_blank" rel="noopener">WebLista</a></p>
+        <p class="mt-1">Web diseñada por <a href="https://hernandalmasso.github.io/weblista/" class="text-brand-500 hover:underline transition-colors" target="_blank" rel="noopener">WebLista</a></p>
     </footer>
 
     <!-- WhatsApp flotante -->
     <a href="https://wa.me/5491100000000?text=Hola!%20Quiero%20sacar%20turno" target="_blank" rel="noopener"
-       class="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-400 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110"
+       class="wa-float fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-400 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg shadow-green-200 transition-all duration-300"
        aria-label="WhatsApp">
         <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
     </a>
+
+    <script>
+    // Intersection Observer for scroll animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => observer.observe(el));
+
+    // Animated counters
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const el = entry.target;
+                const target = parseInt(el.dataset.target);
+                const duration = 2000;
+                const start = performance.now();
+                const animate = (now) => {
+                    const progress = Math.min((now - start) / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    el.textContent = Math.floor(eased * target).toLocaleString('es-AR');
+                    if (progress < 1) requestAnimationFrame(animate);
+                };
+                requestAnimationFrame(animate);
+                counterObserver.unobserve(el);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+    // Floating particles in hero
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 15; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.width = p.style.height = (4 + Math.random() * 6) + 'px';
+        p.style.animationDuration = (8 + Math.random() * 12) + 's';
+        p.style.animationDelay = (Math.random() * 8) + 's';
+        particlesContainer.appendChild(p);
+    }
+
+    // Nav shadow on scroll
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('nav');
+        if (window.scrollY > 50) {
+            nav.style.boxShadow = '0 4px 30px rgba(0,0,0,.08)';
+            nav.style.paddingTop = '12px';
+            nav.style.paddingBottom = '12px';
+        } else {
+            nav.style.boxShadow = 'none';
+            nav.style.paddingTop = '16px';
+            nav.style.paddingBottom = '16px';
+        }
+    });
+    </script>
 </body>
 </html>

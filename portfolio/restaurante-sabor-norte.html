@@ -15,151 +15,338 @@
     </script>
     <style>
         .hero-bg {
-            background: linear-gradient(180deg, rgba(15,23,42,.7) 0%, rgba(15,23,42,.5) 100%),
-                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><rect fill="%2378350F" width="400" height="400"/><circle fill="%2392400E" cx="200" cy="200" r="180"/></svg>');
-            background-size: cover;
+            background: linear-gradient(180deg, rgba(15,23,42,.85) 0%, rgba(28,25,23,.7) 100%);
             background-color: #1C1917;
+            position: relative;
         }
-        .card { transition: transform .3s ease, box-shadow .3s ease; }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -16px rgba(245,158,11,.2); }
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 80%, rgba(245,158,11,.08) 0%, transparent 60%);
+            animation: heroGlow 6s ease-in-out infinite alternate;
+        }
+        @keyframes heroGlow {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Scroll animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-left {
+            opacity: 0; transform: translateX(-40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-left.visible { opacity: 1; transform: translateX(0); }
+        .reveal-right {
+            opacity: 0; transform: translateX(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-right.visible { opacity: 1; transform: translateX(0); }
+        .reveal-scale {
+            opacity: 0; transform: scale(0.85);
+            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+        .delay-5 { transition-delay: 0.5s; }
+
+        /* Hero entrance */
+        @keyframes heroFadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hero-animate { animation: heroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        .hero-delay-1 { animation-delay: 0.3s; }
+        .hero-delay-2 { animation-delay: 0.5s; }
+        .hero-delay-3 { animation-delay: 0.7s; }
+        .hero-delay-4 { animation-delay: 0.9s; }
+
+        /* Cards */
+        .card {
+            transition: transform .4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .4s ease, border-color .3s ease;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(245,158,11,.15);
+            border-color: #FBBF24;
+        }
+        .card .icon {
+            transition: transform .5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .card:hover .icon { transform: scale(1.25) rotate(8deg); }
+
+        /* Price reveal */
+        .card .price {
+            transition: transform .3s ease, color .3s ease;
+        }
+        .card:hover .price { transform: scale(1.05); }
+
+        /* Nav animated underline */
+        .nav-link { position: relative; }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -4px; left: 50%; width: 0; height: 2px;
+            background: #FBBF24; transition: width .3s ease, left .3s ease;
+        }
+        .nav-link:hover::after { width: 100%; left: 0; }
+
+        /* Warm glow on CTA */
+        .cta-glow {
+            box-shadow: 0 0 0 0 rgba(245,158,11,.4);
+            animation: ctaGlow 2.5s ease-in-out infinite;
+        }
+        @keyframes ctaGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245,158,11,.4); }
+            50% { box-shadow: 0 0 20px 4px rgba(245,158,11,.2); }
+        }
+
+        /* WhatsApp bounce */
+        .wa-float { animation: waBounce 2s ease-in-out infinite; }
+        @keyframes waBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        .wa-float:hover { animation: none; transform: scale(1.15); }
+
+        /* Stats bar animation */
+        .stat-bar {
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #D97706, #FBBF24);
+            transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 2px;
+            margin-top: 8px;
+        }
+        .visible .stat-bar { width: 60px; }
+
+        /* Scroll indicator */
+        @keyframes scrollDown {
+            0%, 100% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(8px); opacity: 0.3; }
+        }
+
+        /* Divider line animation */
+        .divider-animated {
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #FBBF24, transparent);
+            transition: width 1.2s ease;
+            margin: 0 auto;
+        }
+        .divider-animated.visible { width: 120px; }
     </style>
 </head>
-<body class="bg-stone-50 text-slate-800 antialiased">
+<body class="bg-stone-50 text-slate-800 antialiased overflow-x-hidden">
 
     <!-- Nav -->
-    <nav class="fixed w-full z-40 bg-stone-900/90 backdrop-blur-md px-6 py-4 flex justify-between items-center">
+    <nav class="fixed w-full z-40 bg-stone-900/90 backdrop-blur-md px-6 py-4 flex justify-between items-center transition-all duration-500" id="nav">
         <a href="#" class="font-display text-2xl text-brand-400">Sabor Norte</a>
         <div class="hidden md:flex space-x-8 text-sm font-semibold text-stone-300">
-            <a href="#carta" class="hover:text-brand-400 transition">Carta</a>
-            <a href="#nosotros" class="hover:text-brand-400 transition">Nosotros</a>
-            <a href="#contacto" class="hover:text-brand-400 transition">Contacto</a>
+            <a href="#carta" class="nav-link hover:text-brand-400 transition">Carta</a>
+            <a href="#nosotros" class="nav-link hover:text-brand-400 transition">Nosotros</a>
+            <a href="#contacto" class="nav-link hover:text-brand-400 transition">Contacto</a>
         </div>
         <a href="https://wa.me/5491100000000?text=Hola!%20Quiero%20reservar%20una%20mesa" target="_blank" rel="noopener"
-           class="bg-brand-600 hover:bg-brand-500 text-white px-5 py-2 rounded-full font-semibold text-sm transition">
+           class="bg-brand-600 hover:bg-brand-500 text-white px-5 py-2 rounded-full font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-brand-600/30 hover:-translate-y-0.5">
             Reservar mesa
         </a>
     </nav>
 
     <!-- Hero -->
-    <section class="hero-bg min-h-screen flex flex-col justify-center items-center text-center px-6">
-        <p class="text-brand-400 font-semibold text-sm tracking-widest uppercase mb-4">Cocina Regional Argentina</p>
-        <h1 class="font-display text-5xl md:text-7xl text-white mb-6 max-w-3xl leading-tight">
-            Los sabores del norte, en tu mesa.
+    <section class="hero-bg min-h-screen flex flex-col justify-center items-center text-center px-6 relative">
+        <p class="hero-animate hero-delay-1 text-brand-400 font-semibold text-sm tracking-widest uppercase mb-4 relative z-10">Cocina Regional Argentina</p>
+        <h1 class="hero-animate hero-delay-2 font-display text-5xl md:text-7xl text-white mb-6 max-w-3xl leading-tight relative z-10">
+            Los sabores del norte, <span class="text-brand-400">en tu mesa.</span>
         </h1>
-        <p class="text-lg text-stone-300 max-w-xl mb-10">
+        <p class="hero-animate hero-delay-3 text-lg text-stone-300 max-w-xl mb-10 relative z-10">
             Empanadas, locro, humita, asado y los mejores cortes de carne. Cocina con identidad, ingredientes de primera y un ambiente que te hace sentir en casa.
         </p>
-        <div class="flex flex-col sm:flex-row gap-4">
+        <div class="hero-animate hero-delay-4 flex flex-col sm:flex-row gap-4 relative z-10">
             <a href="https://wa.me/5491100000000?text=Hola!%20Quiero%20reservar%20una%20mesa" target="_blank" rel="noopener"
-               class="bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-full font-bold text-lg transition">
+               class="cta-glow bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:-translate-y-1">
                 Reservar mesa
             </a>
-            <a href="#carta" class="border border-stone-500 hover:border-brand-400 text-white px-8 py-4 rounded-full font-bold text-lg transition hover:text-brand-400">
+            <a href="#carta" class="border border-stone-500 hover:border-brand-400 text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:text-brand-400 hover:-translate-y-1">
                 Ver la carta
             </a>
         </div>
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 hero-animate hero-delay-4 z-10">
+            <svg class="w-6 h-6 text-brand-400" style="animation: scrollDown 2s ease infinite" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+        </div>
     </section>
 
-    <!-- Destacados -->
+    <!-- Carta -->
     <section id="carta" class="py-24 px-6 max-w-6xl mx-auto scroll-mt-20">
-        <h2 class="font-display text-3xl md:text-5xl text-center mb-4">Nuestros platos</h2>
-        <p class="text-stone-500 text-center mb-16 max-w-xl mx-auto">Cocina argentina de verdad. Ingredientes frescos, recetas con historia.</p>
+        <h2 class="reveal font-display text-3xl md:text-5xl text-center mb-4">Nuestros platos</h2>
+        <div class="reveal delay-1 divider-animated mx-auto mb-4"></div>
+        <p class="reveal delay-2 text-stone-500 text-center mb-16 max-w-xl mx-auto">Cocina argentina de verdad. Ingredientes frescos, recetas con historia.</p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="card bg-white p-8 rounded-2xl border border-stone-200">
-                <div class="text-4xl mb-4">🥟</div>
-                <h3 class="font-display text-xl mb-2">Empanadas</h3>
+            <div class="reveal delay-1 card bg-white p-8 rounded-2xl border border-stone-200 group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">🥟</div>
+                <h3 class="font-display text-xl mb-2 group-hover:text-brand-700 transition-colors">Empanadas</h3>
                 <p class="text-stone-500 mb-3">Carne cortada a cuchillo, pollo, jamón y queso, humita. Horneadas o fritas.</p>
-                <p class="text-brand-700 font-bold">Docena desde $6.500</p>
+                <p class="price text-brand-700 font-bold">Docena desde $6.500</p>
             </div>
-            <div class="card bg-white p-8 rounded-2xl border border-stone-200">
-                <div class="text-4xl mb-4">🍖</div>
-                <h3 class="font-display text-xl mb-2">Parrilla</h3>
+            <div class="reveal delay-2 card bg-white p-8 rounded-2xl border border-stone-200 group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">🍖</div>
+                <h3 class="font-display text-xl mb-2 group-hover:text-brand-700 transition-colors">Parrilla</h3>
                 <p class="text-stone-500 mb-3">Bife de chorizo, entraña, vacío, mollejas. Cortes premium a la brasa.</p>
-                <p class="text-brand-700 font-bold">Desde $9.800</p>
+                <p class="price text-brand-700 font-bold">Desde $9.800</p>
             </div>
-            <div class="card bg-white p-8 rounded-2xl border border-stone-200">
-                <div class="text-4xl mb-4">🫕</div>
-                <h3 class="font-display text-xl mb-2">Locro & Guisos</h3>
+            <div class="reveal delay-3 card bg-white p-8 rounded-2xl border border-stone-200 group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">🫕</div>
+                <h3 class="font-display text-xl mb-2 group-hover:text-brand-700 transition-colors">Locro & Guisos</h3>
                 <p class="text-stone-500 mb-3">Locro norteño, guiso de lentejas, carbonada. Los clásicos de siempre.</p>
-                <p class="text-brand-700 font-bold">Desde $7.200</p>
+                <p class="price text-brand-700 font-bold">Desde $7.200</p>
             </div>
-            <div class="card bg-white p-8 rounded-2xl border border-stone-200">
-                <div class="text-4xl mb-4">🥗</div>
-                <h3 class="font-display text-xl mb-2">Entradas</h3>
+            <div class="reveal delay-1 card bg-white p-8 rounded-2xl border border-stone-200 group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">🥗</div>
+                <h3 class="font-display text-xl mb-2 group-hover:text-brand-700 transition-colors">Entradas</h3>
                 <p class="text-stone-500 mb-3">Provoleta, tabla de fiambres y quesos, humita en chala, tamales.</p>
-                <p class="text-brand-700 font-bold">Desde $4.800</p>
+                <p class="price text-brand-700 font-bold">Desde $4.800</p>
             </div>
-            <div class="card bg-white p-8 rounded-2xl border border-stone-200">
-                <div class="text-4xl mb-4">🍷</div>
-                <h3 class="font-display text-xl mb-2">Vinos</h3>
+            <div class="reveal delay-2 card bg-white p-8 rounded-2xl border border-stone-200 group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">🍷</div>
+                <h3 class="font-display text-xl mb-2 group-hover:text-brand-700 transition-colors">Vinos</h3>
                 <p class="text-stone-500 mb-3">Selección de bodegas argentinas: Malbec, Torrontés, Cabernet. Por copa o botella.</p>
-                <p class="text-brand-700 font-bold">Copa desde $3.500</p>
+                <p class="price text-brand-700 font-bold">Copa desde $3.500</p>
             </div>
-            <div class="card bg-white p-8 rounded-2xl border border-stone-200">
-                <div class="text-4xl mb-4">🍮</div>
-                <h3 class="font-display text-xl mb-2">Postres</h3>
+            <div class="reveal delay-3 card bg-white p-8 rounded-2xl border border-stone-200 group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">🍮</div>
+                <h3 class="font-display text-xl mb-2 group-hover:text-brand-700 transition-colors">Postres</h3>
                 <p class="text-stone-500 mb-3">Flan casero, vigilante, panqueques con dulce de leche, helado artesanal.</p>
-                <p class="text-brand-700 font-bold">Desde $3.800</p>
+                <p class="price text-brand-700 font-bold">Desde $3.800</p>
             </div>
         </div>
 
-        <p class="text-center text-stone-400 mt-12">Carta completa disponible en el local. Consultá por platos del día.</p>
+        <p class="reveal text-center text-stone-400 mt-12">Carta completa disponible en el local. Consultá por platos del día.</p>
     </section>
 
     <!-- Nosotros -->
-    <section id="nosotros" class="py-24 px-6 bg-stone-900 text-white">
+    <section id="nosotros" class="py-24 px-6 bg-stone-900 text-white overflow-hidden">
         <div class="max-w-4xl mx-auto text-center">
-            <h2 class="font-display text-3xl md:text-5xl mb-6">Nuestra historia</h2>
-            <p class="text-lg text-stone-300 leading-relaxed max-w-2xl mx-auto mb-12">
+            <h2 class="reveal font-display text-3xl md:text-5xl mb-6">Nuestra historia</h2>
+            <div class="reveal delay-1 divider-animated mx-auto mb-8"></div>
+            <p class="reveal delay-2 text-lg text-stone-300 leading-relaxed max-w-2xl mx-auto mb-12">
                 Sabor Norte nació en 2018 con una idea simple: traer los sabores auténticos del noroeste argentino
                 a Buenos Aires. Cada plato se prepara con recetas familiares y productos que traemos directamente
                 de Salta, Tucumán y Jujuy. Acá no hay cocina de moda, hay cocina de verdad.
             </p>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-8">
-                <div><p class="text-3xl font-bold text-brand-400">8</p><p class="text-stone-400 text-sm mt-1">Años</p></div>
-                <div><p class="text-3xl font-bold text-brand-400">4.8★</p><p class="text-stone-400 text-sm mt-1">Google</p></div>
-                <div><p class="text-3xl font-bold text-brand-400">60</p><p class="text-stone-400 text-sm mt-1">Cubiertos</p></div>
-                <div><p class="text-3xl font-bold text-brand-400">100%</p><p class="text-stone-400 text-sm mt-1">Ingredientes argentinos</p></div>
+                <div class="reveal-scale delay-1">
+                    <p class="text-3xl font-bold text-brand-400 counter" data-target="8">0</p>
+                    <div class="stat-bar"></div>
+                    <p class="text-stone-400 text-sm mt-2">Años</p>
+                </div>
+                <div class="reveal-scale delay-2">
+                    <p class="text-3xl font-bold text-brand-400">4.8★</p>
+                    <div class="stat-bar"></div>
+                    <p class="text-stone-400 text-sm mt-2">Google</p>
+                </div>
+                <div class="reveal-scale delay-3">
+                    <p class="text-3xl font-bold text-brand-400 counter" data-target="60">0</p>
+                    <div class="stat-bar"></div>
+                    <p class="text-stone-400 text-sm mt-2">Cubiertos</p>
+                </div>
+                <div class="reveal-scale delay-4">
+                    <p class="text-3xl font-bold text-brand-400">100%</p>
+                    <div class="stat-bar"></div>
+                    <p class="text-stone-400 text-sm mt-2">Ingredientes argentinos</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Contacto -->
     <section id="contacto" class="py-24 px-6 max-w-4xl mx-auto scroll-mt-20">
-        <h2 class="font-display text-3xl md:text-5xl text-center mb-16">Vení a comer</h2>
+        <h2 class="reveal font-display text-3xl md:text-5xl text-center mb-16">Vení a comer</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div>
+            <div class="reveal-left">
                 <h3 class="font-bold text-xl mb-4">Horarios</h3>
                 <ul class="space-y-3 text-stone-600">
-                    <li class="flex justify-between border-b border-stone-200 pb-3"><span>Martes a Sábado</span><span class="font-semibold text-stone-800">12:00 — 15:30 / 20:00 — 00:00</span></li>
-                    <li class="flex justify-between border-b border-stone-200 pb-3"><span>Domingos</span><span class="font-semibold text-stone-800">12:00 — 16:00</span></li>
-                    <li class="flex justify-between"><span>Lunes</span><span class="font-semibold text-stone-400">Cerrado</span></li>
+                    <li class="flex justify-between border-b border-stone-200 pb-3 hover:bg-brand-50 px-2 -mx-2 rounded transition-colors"><span>Martes a Sábado</span><span class="font-semibold text-stone-800">12:00 — 15:30 / 20:00 — 00:00</span></li>
+                    <li class="flex justify-between border-b border-stone-200 pb-3 hover:bg-brand-50 px-2 -mx-2 rounded transition-colors"><span>Domingos</span><span class="font-semibold text-stone-800">12:00 — 16:00</span></li>
+                    <li class="flex justify-between hover:bg-brand-50 px-2 -mx-2 rounded transition-colors"><span>Lunes</span><span class="font-semibold text-stone-400">Cerrado</span></li>
                 </ul>
             </div>
-            <div>
+            <div class="reveal-right">
                 <h3 class="font-bold text-xl mb-4">Ubicación</h3>
                 <p class="text-stone-600 mb-1">Honduras 5200</p>
                 <p class="text-stone-600 mb-6">Palermo, Buenos Aires</p>
                 <a href="https://wa.me/5491100000000?text=Hola!%20Quiero%20reservar%20mesa%20en%20Sabor%20Norte" target="_blank" rel="noopener"
-                   class="inline-block bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-xl font-bold transition">
+                   class="inline-block bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-xl font-bold transition-all duration-300 hover:shadow-lg hover:shadow-brand-600/20 hover:-translate-y-1">
                     Reservar por WhatsApp
                 </a>
-                <p class="text-stone-400 text-sm mt-4">También por <a href="https://instagram.com/sabornorte" class="underline hover:text-brand-600">@sabornorte</a></p>
+                <p class="text-stone-400 text-sm mt-4">También por <a href="https://instagram.com/sabornorte" class="underline hover:text-brand-600 transition-colors">@sabornorte</a></p>
             </div>
         </div>
     </section>
 
-    <footer class="text-center py-8 text-stone-400 text-sm border-t border-stone-200">
+    <footer class="reveal text-center py-8 text-stone-400 text-sm border-t border-stone-200">
         <p>&copy; 2026 Sabor Norte. Todos los derechos reservados.</p>
-        <p class="mt-1">Web diseñada por <a href="https://hernandalmasso.github.io/weblista/" class="text-brand-600 hover:underline" target="_blank" rel="noopener">WebLista</a></p>
+        <p class="mt-1">Web diseñada por <a href="https://hernandalmasso.github.io/weblista/" class="text-brand-600 hover:underline transition-colors" target="_blank" rel="noopener">WebLista</a></p>
     </footer>
 
     <!-- WhatsApp flotante -->
     <a href="https://wa.me/5491100000000?text=Hola!%20Quiero%20reservar%20mesa" target="_blank" rel="noopener"
-       class="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-400 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110"
+       class="wa-float fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-400 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg shadow-green-200/50 transition-all duration-300"
        aria-label="WhatsApp">
         <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
     </a>
+
+    <script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .divider-animated').forEach(el => observer.observe(el));
+
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const el = entry.target;
+                const target = parseInt(el.dataset.target);
+                const duration = 2000;
+                const start = performance.now();
+                const animate = (now) => {
+                    const progress = Math.min((now - start) / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    el.textContent = Math.floor(eased * target);
+                    if (progress < 1) requestAnimationFrame(animate);
+                };
+                requestAnimationFrame(animate);
+                counterObserver.unobserve(el);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('nav');
+        if (window.scrollY > 50) {
+            nav.style.boxShadow = '0 4px 30px rgba(0,0,0,.15)';
+            nav.style.paddingTop = '10px';
+            nav.style.paddingBottom = '10px';
+        } else {
+            nav.style.boxShadow = 'none';
+            nav.style.paddingTop = '16px';
+            nav.style.paddingBottom = '16px';
+        }
+    });
+    </script>
 </body>
 </html>

@@ -14,84 +14,245 @@
         }}}
     </script>
     <style>
-        .hero-bg { background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); }
-        .card { transition: transform .3s ease, box-shadow .3s ease; }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -16px rgba(239,68,68,.3); }
+        .hero-bg {
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(239,68,68,.15), transparent 60%);
+        }
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(239,68,68,.08), transparent 70%);
+            animation: pulseOrb 4s ease-in-out infinite alternate;
+        }
+        @keyframes pulseOrb {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.3); opacity: 1; }
+        }
+
+        /* Scroll animations */
+        .reveal {
+            opacity: 0; transform: translateY(50px);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-left {
+            opacity: 0; transform: translateX(-50px);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-left.visible { opacity: 1; transform: translateX(0); }
+        .reveal-right {
+            opacity: 0; transform: translateX(50px);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-right.visible { opacity: 1; transform: translateX(0); }
+        .reveal-scale {
+            opacity: 0; transform: scale(0.8);
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+        .delay-1 { transition-delay: 0.08s; }
+        .delay-2 { transition-delay: 0.16s; }
+        .delay-3 { transition-delay: 0.24s; }
+        .delay-4 { transition-delay: 0.32s; }
+        .delay-5 { transition-delay: 0.4s; }
+
+        /* Hero entrance — snappy */
+        @keyframes heroSlam {
+            0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+            60% { transform: translateY(-4px) scale(1.01); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .hero-animate { animation: heroSlam 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        .hero-delay-1 { animation-delay: 0.2s; }
+        .hero-delay-2 { animation-delay: 0.35s; }
+        .hero-delay-3 { animation-delay: 0.5s; }
+        .hero-delay-4 { animation-delay: 0.65s; }
+
+        /* Cards — aggressive hover */
+        .card {
+            transition: transform .3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .3s ease, border-color .2s ease;
+        }
+        .card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 30px 60px -15px rgba(239,68,68,.25);
+            border-color: #EF4444;
+        }
+        .card .icon {
+            transition: transform .4s cubic-bezier(0.34, 1.56, 0.64, 1), filter .3s ease;
+        }
+        .card:hover .icon { transform: scale(1.3) rotate(-10deg); }
+
+        /* Plan card special */
+        .plan-card {
+            transition: transform .35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .35s ease;
+        }
+        .plan-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 30px 60px -15px rgba(239,68,68,.2);
+        }
         .plan-popular { position: relative; }
-        .plan-popular::before { content:""; position:absolute; inset:-2px; border-radius:1.5rem; background:linear-gradient(135deg,#EF4444,#F59E0B); z-index:-1; }
+        .plan-popular::before {
+            content:""; position:absolute; inset:-2px; border-radius:1.5rem;
+            background:linear-gradient(135deg,#EF4444,#F59E0B);
+            z-index:-1;
+            animation: borderGlow 3s ease-in-out infinite alternate;
+        }
+        @keyframes borderGlow {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; filter: brightness(1.2); }
+        }
+
+        /* CTA power pulse */
+        .cta-power {
+            position: relative;
+            overflow: visible;
+        }
+        .cta-power::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 9999px;
+            background: rgba(239,68,68,.3);
+            animation: powerPulse 1.5s ease-in-out infinite;
+            z-index: -1;
+        }
+        @keyframes powerPulse {
+            0%, 100% { transform: scale(1); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* WhatsApp energetic */
+        .wa-float {
+            animation: waEnergy 1.5s ease-in-out infinite;
+        }
+        @keyframes waEnergy {
+            0%, 100% { transform: translateY(0) scale(1); }
+            25% { transform: translateY(-4px) scale(1.05); }
+            75% { transform: translateY(2px) scale(0.98); }
+        }
+        .wa-float:hover { animation: none; transform: scale(1.2); }
+
+        /* Progress bar for plans */
+        .plan-bar {
+            height: 3px;
+            background: linear-gradient(90deg, #EF4444, #F59E0B);
+            border-radius: 2px;
+            width: 0;
+            transition: width 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
+        }
+        .visible .plan-bar { width: 100%; }
+
+        /* Glitch text effect on hover */
+        .glitch:hover {
+            animation: glitchText 0.3s ease;
+        }
+        @keyframes glitchText {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(2px, -2px); }
+            60% { transform: translate(-1px, -1px); }
+            80% { transform: translate(1px, 1px); }
+        }
+
+        /* Line decoration */
+        .accent-line {
+            width: 0;
+            height: 4px;
+            background: #EF4444;
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .accent-line.visible { width: 60px; }
     </style>
 </head>
-<body class="bg-slate-950 text-white antialiased">
+<body class="bg-slate-950 text-white antialiased overflow-x-hidden">
 
     <!-- Nav -->
-    <nav class="fixed w-full z-40 bg-slate-950/90 backdrop-blur-md px-6 py-4 flex justify-between items-center border-b border-slate-800">
-        <a href="#" class="text-2xl font-black tracking-tight">PULSE<span class="text-brand-500">FIT</span></a>
+    <nav class="fixed w-full z-40 bg-slate-950/90 backdrop-blur-md px-6 py-4 flex justify-between items-center border-b border-slate-800 transition-all duration-300" id="nav">
+        <a href="#" class="text-2xl font-black tracking-tight glitch">PULSE<span class="text-brand-500">FIT</span></a>
         <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-400">
-            <a href="#clases" class="hover:text-white transition">Clases</a>
-            <a href="#planes" class="hover:text-white transition">Planes</a>
-            <a href="#contacto" class="hover:text-white transition">Contacto</a>
+            <a href="#clases" class="hover:text-white transition-all duration-200 hover:-translate-y-0.5">Clases</a>
+            <a href="#planes" class="hover:text-white transition-all duration-200 hover:-translate-y-0.5">Planes</a>
+            <a href="#contacto" class="hover:text-white transition-all duration-200 hover:-translate-y-0.5">Contacto</a>
         </div>
         <a href="https://wa.me/5491100000000?text=Hola!%20Quiero%20probar%20una%20clase%20gratis" target="_blank" rel="noopener"
-           class="bg-brand-600 hover:bg-brand-500 text-white px-5 py-2 rounded-full font-bold text-sm transition">
+           class="bg-brand-600 hover:bg-brand-500 text-white px-5 py-2 rounded-full font-bold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-brand-600/40 hover:-translate-y-0.5 active:scale-95">
             Clase gratis
         </a>
     </nav>
 
     <!-- Hero -->
-    <section class="hero-bg min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20 relative overflow-hidden">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(239,68,68,.15),transparent_60%)]"></div>
-        <p class="text-brand-500 font-bold text-sm tracking-widest uppercase mb-4 relative">Gimnasio & Funcional</p>
-        <h1 class="text-5xl md:text-7xl font-black tracking-tight mb-6 max-w-3xl leading-tight relative">
+    <section class="hero-bg min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20 relative">
+        <p class="hero-animate hero-delay-1 text-brand-500 font-bold text-sm tracking-widest uppercase mb-4 relative z-10">Gimnasio & Funcional</p>
+        <h1 class="hero-animate hero-delay-2 text-5xl md:text-7xl font-black tracking-tight mb-6 max-w-3xl leading-tight relative z-10">
             No hay excusas.<br>Hay <span class="text-brand-500">resultados.</span>
         </h1>
-        <p class="text-lg text-slate-400 max-w-xl mb-10 relative">
+        <p class="hero-animate hero-delay-3 text-lg text-slate-400 max-w-xl mb-10 relative z-10">
             Musculación, funcional, crosstraining, spinning y más. Equipamiento de primera, coaches certificados y un ambiente que te motiva.
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 relative">
+        <div class="hero-animate hero-delay-4 flex flex-col sm:flex-row gap-4 relative z-10">
             <a href="https://wa.me/5491100000000?text=Hola!%20Quiero%20probar%20una%20clase%20gratis" target="_blank" rel="noopener"
-               class="bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-full font-bold text-lg transition">
+               class="cta-power bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:-translate-y-1 active:scale-95">
                 Probá una clase GRATIS
             </a>
-            <a href="#planes" class="border border-slate-600 hover:border-brand-500 text-white px-8 py-4 rounded-full font-bold text-lg transition hover:text-brand-500">
+            <a href="#planes" class="border border-slate-600 hover:border-brand-500 text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:text-brand-500 hover:-translate-y-1">
                 Ver planes
             </a>
+        </div>
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 hero-animate hero-delay-4 z-10">
+            <div class="w-1 h-12 rounded-full overflow-hidden bg-slate-800">
+                <div class="w-full bg-brand-500 rounded-full animate-bounce" style="height:40%; animation-duration:1.5s"></div>
+            </div>
         </div>
     </section>
 
     <!-- Clases -->
     <section id="clases" class="py-24 px-6 max-w-6xl mx-auto scroll-mt-20">
-        <h2 class="text-3xl md:text-5xl font-black text-center mb-4">Nuestras clases</h2>
-        <p class="text-slate-500 text-center mb-16 max-w-xl mx-auto">Más de 30 clases por semana. Encontrá la que se ajuste a tu nivel y objetivo.</p>
+        <h2 class="reveal text-3xl md:text-5xl font-black text-center mb-4">Nuestras clases</h2>
+        <div class="reveal delay-1 accent-line mx-auto mb-4"></div>
+        <p class="reveal delay-2 text-slate-500 text-center mb-16 max-w-xl mx-auto">Más de 30 clases por semana. Encontrá la que se ajuste a tu nivel y objetivo.</p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="card bg-slate-900 border border-slate-800 p-8 rounded-2xl">
-                <div class="text-4xl mb-4">🏋️</div>
-                <h3 class="text-xl font-bold mb-2">Musculación</h3>
+            <div class="reveal delay-1 card bg-slate-900 border border-slate-800 p-8 rounded-2xl group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">🏋️</div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-brand-500 transition-colors">Musculación</h3>
                 <p class="text-slate-400">Sala completa con equipamiento de última generación. Rutinas personalizadas.</p>
             </div>
-            <div class="card bg-slate-900 border border-slate-800 p-8 rounded-2xl">
-                <div class="text-4xl mb-4">⚡</div>
-                <h3 class="text-xl font-bold mb-2">Funcional</h3>
+            <div class="reveal delay-2 card bg-slate-900 border border-slate-800 p-8 rounded-2xl group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">⚡</div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-brand-500 transition-colors">Funcional</h3>
                 <p class="text-slate-400">Circuitos de alta intensidad en grupos reducidos. Todos los niveles.</p>
             </div>
-            <div class="card bg-slate-900 border border-slate-800 p-8 rounded-2xl">
-                <div class="text-4xl mb-4">🚴</div>
-                <h3 class="text-xl font-bold mb-2">Spinning</h3>
+            <div class="reveal delay-3 card bg-slate-900 border border-slate-800 p-8 rounded-2xl group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">🚴</div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-brand-500 transition-colors">Spinning</h3>
                 <p class="text-slate-400">Clases con música, luces y energía al máximo. 45 minutos que te cambian el día.</p>
             </div>
-            <div class="card bg-slate-900 border border-slate-800 p-8 rounded-2xl">
-                <div class="text-4xl mb-4">🥊</div>
-                <h3 class="text-xl font-bold mb-2">Box / Kickboxing</h3>
+            <div class="reveal delay-1 card bg-slate-900 border border-slate-800 p-8 rounded-2xl group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">🥊</div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-brand-500 transition-colors">Box / Kickboxing</h3>
                 <p class="text-slate-400">Descargá energía y mejorá tu condición física con técnicas de combate.</p>
             </div>
-            <div class="card bg-slate-900 border border-slate-800 p-8 rounded-2xl">
-                <div class="text-4xl mb-4">🧘</div>
-                <h3 class="text-xl font-bold mb-2">Yoga</h3>
+            <div class="reveal delay-2 card bg-slate-900 border border-slate-800 p-8 rounded-2xl group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">🧘</div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-brand-500 transition-colors">Yoga</h3>
                 <p class="text-slate-400">Flexibilidad, fuerza y calma. Clases de Hatha y Vinyasa para todos los niveles.</p>
             </div>
-            <div class="card bg-slate-900 border border-slate-800 p-8 rounded-2xl">
-                <div class="text-4xl mb-4">🏃</div>
-                <h3 class="text-xl font-bold mb-2">HIIT</h3>
+            <div class="reveal delay-3 card bg-slate-900 border border-slate-800 p-8 rounded-2xl group cursor-default">
+                <div class="icon text-4xl mb-4 inline-block">🏃</div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-brand-500 transition-colors">HIIT</h3>
                 <p class="text-slate-400">30 minutos de intervalos de alta intensidad. Máximo resultado, mínimo tiempo.</p>
             </div>
         </div>
@@ -100,69 +261,72 @@
     <!-- Planes -->
     <section id="planes" class="py-24 px-6 bg-slate-900/50 scroll-mt-20">
         <div class="max-w-5xl mx-auto">
-            <h2 class="text-3xl md:text-5xl font-black text-center mb-4">Planes y precios</h2>
-            <p class="text-slate-500 text-center mb-16">Sin matrícula, sin permanencia. Cancelá cuando quieras.</p>
+            <h2 class="reveal text-3xl md:text-5xl font-black text-center mb-4">Planes y precios</h2>
+            <p class="reveal delay-1 text-slate-500 text-center mb-16">Sin matrícula, sin permanencia. Cancelá cuando quieras.</p>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
                 <!-- Básico -->
-                <div class="card bg-slate-900 border border-slate-800 p-8 rounded-3xl text-center">
+                <div class="reveal delay-1 plan-card bg-slate-900 border border-slate-800 p-8 rounded-3xl text-center">
                     <h3 class="text-xl font-bold mb-1">Básico</h3>
                     <p class="text-slate-500 text-sm mb-5">Musculación</p>
                     <div class="mb-6">
                         <span class="text-5xl font-black">$18k</span>
                         <span class="text-slate-500 text-sm">/mes</span>
                     </div>
+                    <div class="plan-bar mb-6"></div>
                     <ul class="space-y-3 text-left text-slate-400 mb-8 text-sm">
-                        <li class="flex items-center gap-2">✓ Sala de musculación</li>
-                        <li class="flex items-center gap-2">✓ Lunes a Viernes</li>
-                        <li class="flex items-center gap-2">✓ Vestuarios</li>
-                        <li class="flex items-center gap-2 text-slate-600">✗ Clases grupales</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Sala de musculación</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Lunes a Viernes</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Vestuarios</li>
+                        <li class="flex items-center gap-2 text-slate-600"><span>✗</span> Clases grupales</li>
                     </ul>
                     <a href="https://wa.me/5491100000000?text=Hola!%20Me%20interesa%20el%20plan%20B%C3%A1sico" target="_blank" rel="noopener"
-                       class="block w-full border border-slate-700 hover:border-brand-500 text-white py-3 rounded-xl font-bold transition text-center">
+                       class="block w-full border border-slate-700 hover:border-brand-500 text-white py-3 rounded-xl font-bold transition-all duration-300 text-center hover:bg-brand-600/10 hover:-translate-y-0.5">
                         Inscribirme
                     </a>
                 </div>
 
                 <!-- Full (popular) -->
-                <div class="plan-popular">
-                    <div class="bg-slate-900 border border-brand-500 p-8 rounded-3xl text-center">
-                        <div class="bg-brand-600 text-white text-xs font-bold px-4 py-1 rounded-full inline-block mb-4">Más elegido</div>
+                <div class="reveal delay-2 plan-popular">
+                    <div class="plan-card bg-slate-900 border border-brand-500 p-8 rounded-3xl text-center">
+                        <div class="bg-brand-600 text-white text-xs font-bold px-4 py-1 rounded-full inline-block mb-4 animate-pulse">Más elegido</div>
                         <h3 class="text-xl font-bold mb-1 text-brand-500">Full</h3>
                         <p class="text-slate-500 text-sm mb-5">Musculación + Clases</p>
                         <div class="mb-6">
                             <span class="text-5xl font-black">$25k</span>
                             <span class="text-slate-500 text-sm">/mes</span>
                         </div>
+                        <div class="plan-bar mb-6"></div>
                         <ul class="space-y-3 text-left text-slate-400 mb-8 text-sm">
-                            <li class="flex items-center gap-2">✓ Todo el gimnasio</li>
-                            <li class="flex items-center gap-2">✓ Todas las clases</li>
-                            <li class="flex items-center gap-2">✓ Lunes a Sábado</li>
-                            <li class="flex items-center gap-2">✓ App de rutinas</li>
+                            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Todo el gimnasio</li>
+                            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Todas las clases</li>
+                            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Lunes a Sábado</li>
+                            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> App de rutinas</li>
                         </ul>
                         <a href="https://wa.me/5491100000000?text=Hola!%20Me%20interesa%20el%20plan%20Full" target="_blank" rel="noopener"
-                           class="block w-full bg-brand-600 hover:bg-brand-500 text-white py-3 rounded-xl font-bold transition text-center">
+                           class="block w-full bg-brand-600 hover:bg-brand-500 text-white py-3 rounded-xl font-bold transition-all duration-300 text-center hover:-translate-y-0.5 active:scale-95">
                             Inscribirme
                         </a>
                     </div>
                 </div>
 
                 <!-- Premium -->
-                <div class="card bg-slate-900 border border-slate-800 p-8 rounded-3xl text-center">
+                <div class="reveal delay-3 plan-card bg-slate-900 border border-slate-800 p-8 rounded-3xl text-center">
                     <h3 class="text-xl font-bold mb-1">Premium</h3>
                     <p class="text-slate-500 text-sm mb-5">Full + Personal trainer</p>
                     <div class="mb-6">
                         <span class="text-5xl font-black">$40k</span>
                         <span class="text-slate-500 text-sm">/mes</span>
                     </div>
+                    <div class="plan-bar mb-6"></div>
                     <ul class="space-y-3 text-left text-slate-400 mb-8 text-sm">
-                        <li class="flex items-center gap-2">✓ Todo lo de Full</li>
-                        <li class="flex items-center gap-2">✓ 2 sesiones/semana con PT</li>
-                        <li class="flex items-center gap-2">✓ Plan nutricional</li>
-                        <li class="flex items-center gap-2">✓ Acceso 7 días</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Todo lo de Full</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 2 sesiones/semana con PT</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Plan nutricional</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Acceso 7 días</li>
                     </ul>
                     <a href="https://wa.me/5491100000000?text=Hola!%20Me%20interesa%20el%20plan%20Premium" target="_blank" rel="noopener"
-                       class="block w-full border border-slate-700 hover:border-brand-500 text-white py-3 rounded-xl font-bold transition text-center">
+                       class="block w-full border border-slate-700 hover:border-brand-500 text-white py-3 rounded-xl font-bold transition-all duration-300 text-center hover:bg-brand-600/10 hover:-translate-y-0.5">
                         Inscribirme
                     </a>
                 </div>
@@ -172,38 +336,61 @@
 
     <!-- Contacto -->
     <section id="contacto" class="py-24 px-6 max-w-4xl mx-auto scroll-mt-20">
-        <h2 class="text-3xl md:text-5xl font-black text-center mb-16">Vení a entrenar</h2>
+        <h2 class="reveal text-3xl md:text-5xl font-black text-center mb-16">Vení a entrenar</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div>
+            <div class="reveal-left">
                 <h3 class="font-bold text-xl mb-4">Horarios</h3>
                 <ul class="space-y-3 text-slate-400">
-                    <li class="flex justify-between border-b border-slate-800 pb-3"><span>Lunes a Viernes</span><span class="font-semibold text-white">7:00 — 22:00</span></li>
-                    <li class="flex justify-between border-b border-slate-800 pb-3"><span>Sábados</span><span class="font-semibold text-white">8:00 — 14:00</span></li>
-                    <li class="flex justify-between"><span>Domingos</span><span class="font-semibold text-slate-600">Cerrado</span></li>
+                    <li class="flex justify-between border-b border-slate-800 pb-3 hover:bg-slate-900 px-2 -mx-2 rounded transition-colors"><span>Lunes a Viernes</span><span class="font-semibold text-white">7:00 — 22:00</span></li>
+                    <li class="flex justify-between border-b border-slate-800 pb-3 hover:bg-slate-900 px-2 -mx-2 rounded transition-colors"><span>Sábados</span><span class="font-semibold text-white">8:00 — 14:00</span></li>
+                    <li class="flex justify-between hover:bg-slate-900 px-2 -mx-2 rounded transition-colors"><span>Domingos</span><span class="font-semibold text-slate-600">Cerrado</span></li>
                 </ul>
             </div>
-            <div>
+            <div class="reveal-right">
                 <h3 class="font-bold text-xl mb-4">Ubicación</h3>
                 <p class="text-slate-400 mb-1">Av. Cabildo 2800</p>
                 <p class="text-slate-400 mb-6">Belgrano, Buenos Aires</p>
                 <a href="https://wa.me/5491100000000?text=Hola!%20Quiero%20probar%20una%20clase%20gratis%20en%20PulseFit" target="_blank" rel="noopener"
-                   class="inline-block bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-xl font-bold transition">
+                   class="inline-block bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-xl font-bold transition-all duration-300 hover:shadow-lg hover:shadow-brand-600/30 hover:-translate-y-1 active:scale-95">
                     Probá una clase GRATIS
                 </a>
             </div>
         </div>
     </section>
 
-    <footer class="text-center py-8 text-slate-600 text-sm border-t border-slate-800">
+    <footer class="reveal text-center py-8 text-slate-600 text-sm border-t border-slate-800">
         <p>&copy; 2026 PulseFit. Todos los derechos reservados.</p>
-        <p class="mt-1">Web diseñada por <a href="https://hernandalmasso.github.io/weblista/" class="text-brand-500 hover:underline" target="_blank" rel="noopener">WebLista</a></p>
+        <p class="mt-1">Web diseñada por <a href="https://hernandalmasso.github.io/weblista/" class="text-brand-500 hover:underline transition-colors" target="_blank" rel="noopener">WebLista</a></p>
     </footer>
 
     <!-- WhatsApp flotante -->
     <a href="https://wa.me/5491100000000?text=Hola!%20Quiero%20info%20de%20PulseFit" target="_blank" rel="noopener"
-       class="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-400 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110"
+       class="wa-float fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-400 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg shadow-green-500/30 transition-all duration-300"
        aria-label="WhatsApp">
         <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
     </a>
+
+    <script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .accent-line, .plan-bar').forEach(el => observer.observe(el));
+
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('nav');
+        if (window.scrollY > 50) {
+            nav.style.borderColor = '#EF4444';
+            nav.style.paddingTop = '10px';
+            nav.style.paddingBottom = '10px';
+        } else {
+            nav.style.borderColor = '#1E293B';
+            nav.style.paddingTop = '16px';
+            nav.style.paddingBottom = '16px';
+        }
+    });
+    </script>
 </body>
 </html>
