@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peluquería Mía — Turnos y Servicios</title>
+    <meta name="description" content="Peluquería Mía en Villa Pueyrredón. Corte, color, tratamientos y más. Sacá tu turno por WhatsApp.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: {
+            fontFamily: { display: ['Playfair Display', 'serif'], sans: ['Inter', 'sans-serif'] },
+            colors: { brand: { 50:'#FFF1F2', 100:'#FFE4E6', 200:'#FECDD3', 400:'#FB7185', 500:'#F43F5E', 600:'#E11D48', 700:'#BE123C', 900:'#881337' } }
+        }}}
+    </script>
+    <style>
+        .hero-bg { background: linear-gradient(135deg, #FFF1F2 0%, #FFE4E6 50%, #FECDD3 100%); }
+        .glass { background: rgba(255,255,255,.75); backdrop-filter: blur(12px); border: 1px solid rgba(0,0,0,.06); }
+        .card { transition: transform .3s ease, box-shadow .3s ease; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -16px rgba(244,63,94,.25); }
+    </style>
+</head>
+<body class="bg-white text-slate-800 antialiased">
+
+    <!-- Nav -->
+    <nav class="fixed w-full z-40 glass px-6 py-4 flex justify-between items-center">
+        <a href="#" class="font-display text-2xl font-bold text-brand-700">Mía</a>
+        <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
+            <a href="#servicios" class="hover:text-brand-600 transition">Servicios</a>
+            <a href="#nosotras" class="hover:text-brand-600 transition">Nosotras</a>
+            <a href="#contacto" class="hover:text-brand-600 transition">Contacto</a>
+        </div>
+        <a href="https://wa.me/5491100000000?text=Hola!%20Quiero%20sacar%20turno" target="_blank" rel="noopener"
+           class="bg-brand-600 hover:bg-brand-500 text-white px-5 py-2 rounded-full font-semibold text-sm transition">
+            Sacar turno
+        </a>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero-bg min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20">
+        <p class="text-brand-600 font-semibold text-sm tracking-widest uppercase mb-4">Peluquería & Estética</p>
+        <h1 class="font-display text-5xl md:text-7xl font-bold text-slate-900 mb-6 max-w-3xl leading-tight">
+            Tu mejor versión empieza acá.
+        </h1>
+        <p class="text-lg text-slate-600 max-w-xl mb-10">
+            Corte, color, tratamientos capilares y más. En Villa Pueyrredón, con turnos flexibles y atención personalizada.
+        </p>
+        <a href="https://wa.me/5491100000000?text=Hola!%20Quiero%20sacar%20turno" target="_blank" rel="noopener"
+           class="bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-full font-bold text-lg transition shadow-lg shadow-brand-200">
+            Sacá tu turno por WhatsApp
+        </a>
+    </section>
+
+    <!-- Servicios -->
+    <section id="servicios" class="py-24 px-6 max-w-6xl mx-auto scroll-mt-20">
+        <h2 class="font-display text-3xl md:text-5xl font-bold text-center mb-4">Nuestros servicios</h2>
+        <p class="text-slate-500 text-center mb-16 max-w-xl mx-auto">Todo lo que necesitás para tu pelo, en un solo lugar.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="card bg-brand-50 p-8 rounded-2xl">
+                <div class="text-4xl mb-4">✂️</div>
+                <h3 class="text-xl font-bold mb-2">Corte</h3>
+                <p class="text-slate-600 mb-4">Corte personalizado según tu estilo y tipo de pelo. Incluye lavado y secado.</p>
+                <p class="text-brand-600 font-bold text-lg">Desde $5.500</p>
+            </div>
+            <div class="card bg-brand-50 p-8 rounded-2xl">
+                <div class="text-4xl mb-4">🎨</div>
+                <h3 class="text-xl font-bold mb-2">Color & Mechas</h3>
+                <p class="text-slate-600 mb-4">Balayage, mechas, color completo. Usamos productos de primera línea.</p>
+                <p class="text-brand-600 font-bold text-lg">Desde $12.000</p>
+            </div>
+            <div class="card bg-brand-50 p-8 rounded-2xl">
+                <div class="text-4xl mb-4">💆</div>
+                <h3 class="text-xl font-bold mb-2">Tratamientos</h3>
+                <p class="text-slate-600 mb-4">Keratina, botox capilar, hidratación profunda. Tu pelo lo va a agradecer.</p>
+                <p class="text-brand-600 font-bold text-lg">Desde $8.000</p>
+            </div>
+            <div class="card bg-brand-50 p-8 rounded-2xl">
+                <div class="text-4xl mb-4">💅</div>
+                <h3 class="text-xl font-bold mb-2">Manicura</h3>
+                <p class="text-slate-600 mb-4">Semipermanente, esculpidas, nail art. Manos impecables siempre.</p>
+                <p class="text-brand-600 font-bold text-lg">Desde $4.500</p>
+            </div>
+            <div class="card bg-brand-50 p-8 rounded-2xl">
+                <div class="text-4xl mb-4">👰</div>
+                <h3 class="text-xl font-bold mb-2">Novias & Eventos</h3>
+                <p class="text-slate-600 mb-4">Peinado + maquillaje para tu día especial. También hacemos pruebas previas.</p>
+                <p class="text-brand-600 font-bold text-lg">Consultar</p>
+            </div>
+            <div class="card bg-brand-50 p-8 rounded-2xl">
+                <div class="text-4xl mb-4">🧴</div>
+                <h3 class="text-xl font-bold mb-2">Alisado</h3>
+                <p class="text-slate-600 mb-4">Alisado definitivo y progresivo. Resultados que duran meses.</p>
+                <p class="text-brand-600 font-bold text-lg">Desde $15.000</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nosotras -->
+    <section id="nosotras" class="py-24 px-6 bg-brand-50">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="font-display text-3xl md:text-5xl font-bold mb-6">Sobre nosotras</h2>
+            <p class="text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto mb-8">
+                Somos un equipo de estilistas con más de 10 años de experiencia. Nos apasiona lo que hacemos
+                y creemos que cada persona merece sentirse bien con su pelo. Te esperamos en nuestro salón
+                de Villa Pueyrredón, con ambiente cálido y atención de primera.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-12">
+                <div class="text-center">
+                    <p class="text-4xl font-bold text-brand-600">10+</p>
+                    <p class="text-slate-500 mt-1">Años de experiencia</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-4xl font-bold text-brand-600">3.000+</p>
+                    <p class="text-slate-500 mt-1">Clientas felices</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-4xl font-bold text-brand-600">4.9 ★</p>
+                    <p class="text-slate-500 mt-1">En Google Maps</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Horarios + Contacto -->
+    <section id="contacto" class="py-24 px-6 max-w-4xl mx-auto scroll-mt-20">
+        <h2 class="font-display text-3xl md:text-5xl font-bold text-center mb-16">Vení a vernos</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div>
+                <h3 class="font-bold text-xl mb-4">Horarios</h3>
+                <ul class="space-y-3 text-slate-600">
+                    <li class="flex justify-between border-b border-slate-100 pb-3"><span>Lunes a Viernes</span><span class="font-semibold text-slate-800">9:00 — 19:00</span></li>
+                    <li class="flex justify-between border-b border-slate-100 pb-3"><span>Sábados</span><span class="font-semibold text-slate-800">9:00 — 14:00</span></li>
+                    <li class="flex justify-between"><span>Domingos</span><span class="font-semibold text-slate-400">Cerrado</span></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold text-xl mb-4">Ubicación</h3>
+                <p class="text-slate-600 mb-2">Av. Salvador María del Carril 1234</p>
+                <p class="text-slate-600 mb-6">Villa Pueyrredón, CABA</p>
+                <a href="https://wa.me/5491100000000?text=Hola!%20Quiero%20sacar%20turno%20en%20Peluquer%C3%ADa%20M%C3%ADa" target="_blank" rel="noopener"
+                   class="inline-block bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-xl font-bold transition">
+                    Sacar turno por WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center py-8 text-slate-400 text-sm border-t border-slate-100">
+        <p>&copy; 2026 Peluquería Mía. Todos los derechos reservados.</p>
+        <p class="mt-1">Web diseñada por <a href="https://hernandalmasso.github.io/weblista/" class="text-brand-500 hover:underline" target="_blank" rel="noopener">WebLista</a></p>
+    </footer>
+
+    <!-- WhatsApp flotante -->
+    <a href="https://wa.me/5491100000000?text=Hola!%20Quiero%20sacar%20turno" target="_blank" rel="noopener"
+       class="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-400 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110"
+       aria-label="WhatsApp">
+        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+    </a>
+</body>
+</html>
