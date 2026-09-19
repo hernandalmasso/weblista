@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebLista — Páginas web profesionales a bajo costo</title>
+    <meta name="description" content="Diseñamos tu página web: profesional, rápida y lista para recibir clientes. A un precio real, sin vueltas.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: { extend: {
+                fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                colors: { tech: { accent: '#4F46E5' } }
+            }}
+        }
+    </script>
+    <style>
+        body { background-color: #F5F7FB; color: #0F172A; }
+        .glass { background: rgba(255,255,255,.7); backdrop-filter: blur(12px); border: 1px solid rgba(15,23,42,.08); }
+
+        .gradient-text {
+            background: linear-gradient(110deg, #4F46E5, #7C3AED, #DB2777, #4F46E5);
+            background-size: 250% auto;
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+            animation: gradientShift 6s ease-in-out infinite;
+        }
+        @keyframes gradientShift { 0%{background-position:0% center} 50%{background-position:100% center} 100%{background-position:0% center} }
+
+        .blob { position: absolute; filter: blur(90px); z-index:-1; opacity:.35; will-change: transform; }
+        .blob-1 { animation: float1 16s ease-in-out infinite; }
+        .blob-2 { animation: float2 20s ease-in-out infinite; }
+        @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,30px)} }
+        @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-50px,-25px)} }
+
+        .enter { opacity:0; transform: translateY(22px); animation: fadeUp .8s cubic-bezier(.2,.7,.2,1) forwards; }
+        .d1{animation-delay:.05s}.d2{animation-delay:.20s}.d3{animation-delay:.38s}.d4{animation-delay:.55s}
+        @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+
+        .reveal { opacity:0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+        .reveal.in { opacity:1; transform:none; }
+
+        .glow:hover { box-shadow: 0 10px 28px -8px rgba(79,70,229,.45); transform: translateY(-4px); }
+        .card { box-shadow: 0 1px 3px rgba(15,23,42,.06); transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease; }
+        .card:hover { transform: translateY(-6px); border-color: rgba(79,70,229,.35); box-shadow: 0 22px 45px -22px rgba(79,70,229,.45); }
+        .card:hover .card-ico { transform: scale(1.08) rotate(-3deg); }
+        .card-ico { transition: transform .3s ease; }
+
+        .shine { position: relative; overflow: hidden; }
+        .shine::after {
+            content:""; position:absolute; top:0; left:-120%; width:60%; height:100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,.4), transparent);
+            transform: skewX(-20deg);
+        }
+        .shine:hover::after { animation: sweep .8s ease; }
+        @keyframes sweep { to { left: 140%; } }
+
+        .marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+                   mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+        .marquee-track { display: flex; gap: 3.5rem; width: max-content; animation: scrollX 32s linear infinite; }
+        .marquee:hover .marquee-track { animation-play-state: paused; }
+        @keyframes scrollX { to { transform: translateX(-50%); } }
+        .brand { color:#94A3B8; font-weight:800; font-size:1.35rem; letter-spacing:-.01em; white-space:nowrap; transition: color .2s ease; }
+        .brand:hover { color:#475569; }
+
+        #nav { transition: background .3s ease, box-shadow .3s ease; }
+        #nav.scrolled { background: rgba(255,255,255,.9); box-shadow: 0 8px 30px -14px rgba(15,23,42,.18); }
+
+        a:focus-visible, button:focus-visible, input:focus-visible { outline:2px solid #6366F1; outline-offset:3px; border-radius:6px; }
+        .skip-link { position:absolute; left:-999px; top:0; z-index:100; background:#4F46E5; color:#fff; padding:.75rem 1.25rem; border-radius:0 0 .5rem 0; }
+        .skip-link:focus { left:0; }
+
+        #contact-pop { transition: opacity .25s ease, transform .25s ease; }
+        .pop-open { opacity:1; transform:translateY(0); pointer-events:all; }
+        .pop-closed { opacity:0; transform:translateY(16px); pointer-events:none; visibility:hidden; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .scroll-smooth { scroll-behavior:auto; }
+            *, *::before, *::after { animation:none !important; transition:none !important; }
+            .enter, .reveal { opacity:1 !important; transform:none !important; }
+            .glow:hover, .card:hover { transform:none; }
+            .marquee-track { flex-wrap: wrap; justify-content: center; gap: 1.5rem 3rem; }
+        }
+    </style>
+</head>
+<body class="antialiased relative overflow-x-hidden">
+
+    <!-- Sprite de íconos SVG (se renderizan siempre, sin librerías externas) -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+        <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></symbol>
+        <symbol id="i-droplet" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></symbol>
+        <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3z"/></symbol>
+        <symbol id="i-layers" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
+        <symbol id="i-phone-app" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></symbol>
+        <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M12 14l4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></symbol>
+        <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+        <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8A8.5 8.5 0 0 1 12.5 3a8.5 8.5 0 0 1 8.5 8.5z"/></symbol>
+        <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></symbol>
+        <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></symbol>
+        <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></symbol>
+        <symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+    </svg>
+
+    <a href="#servicios" class="skip-link">Saltar al contenido</a>
+
+    <div class="blob blob-1 bg-indigo-300 w-96 h-96 rounded-full top-0 left-0" aria-hidden="true"></div>
+    <div class="blob blob-2 bg-violet-300 w-96 h-96 rounded-full bottom-0 right-0" aria-hidden="true"></div>
+
+    <header>
+    <nav id="nav" class="fixed w-full z-40 glass px-6 py-4 flex justify-between items-center" aria-label="Navegación principal">
+        <a href="#top" class="text-2xl font-bold tracking-tighter">
+            <span class="text-slate-900">Web</span><span class="text-indigo-600">Lista</span>
+        </a>
+        <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
+            <a href="#servicios" class="hover:text-slate-900 transition">Servicios</a>
+            <a href="#proceso" class="hover:text-slate-900 transition">Cómo trabajamos</a>
+            <a href="#contacto" class="hover:text-slate-900 transition">Contacto</a>
+        </div>
+        <a href="#contacto" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 rounded-full font-semibold transition glow">
+            Escríbenos
+        </a>
+    </nav>
+    </header>
+
+    <main id="top">
+
+    <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 pt-24 pb-12">
+        <div class="enter d1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-sm font-medium text-indigo-600 mb-6">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-zap"/></svg>
+            Tu web online en pocos días
+        </div>
+        <h1 class="enter d2 text-5xl md:text-7xl font-extrabold tracking-tight mb-6 max-w-4xl leading-tight text-slate-900">
+            Una página web que trabaja para tu negocio,
+            <span class="gradient-text">a un precio real.</span>
+        </h1>
+        <p class="enter d3 text-xl text-slate-600 max-w-2xl mb-10">
+            Diseñamos páginas web profesionales, rápidas y pensadas para recibir clientes.
+            Sin costos inflados y sin vueltas técnicas: tú te ocupas de tu negocio, nosotros de que tu web funcione.
+        </p>
+        <div class="enter d4 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
+            <a href="#contacto" class="shine bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-full font-bold text-lg transition glow">
+                Pide tu página
+            </a>
+            <a href="#proceso" class="bg-white hover:bg-slate-100 text-slate-800 border border-slate-200 px-8 py-4 rounded-full font-bold text-lg transition">
+                Cómo trabajamos
+            </a>
+        </div>
+    </section>
+
+    <!-- Franja de marcas (placeholder — reemplazar por logos reales) -->
+    <section class="py-10 border-y border-slate-200 bg-white/50" aria-label="Marcas que nos eligieron">
+        <p class="text-center text-xs font-semibold tracking-widest text-slate-400 uppercase mb-6">Marcas que nos eligieron</p>
+        <div class="marquee">
+            <div class="marquee-track">
+                <span class="brand">CasaViva</span>
+                <span class="brand">Café&nbsp;Delta</span>
+                <span class="brand">PulseFit</span>
+                <span class="brand">Studio&nbsp;Lúa</span>
+                <span class="brand">MotorHaus</span>
+                <span class="brand">Fincas&nbsp;Roble</span>
+                <span class="brand">NimbusLab</span>
+                <span class="brand">Sabor&nbsp;Norte</span>
+                <span class="brand" aria-hidden="true">CasaViva</span>
+                <span class="brand" aria-hidden="true">Café&nbsp;Delta</span>
+                <span class="brand" aria-hidden="true">PulseFit</span>
+                <span class="brand" aria-hidden="true">Studio&nbsp;Lúa</span>
+                <span class="brand" aria-hidden="true">MotorHaus</span>
+                <span class="brand" aria-hidden="true">Fincas&nbsp;Roble</span>
+                <span class="brand" aria-hidden="true">NimbusLab</span>
+                <span class="brand" aria-hidden="true">Sabor&nbsp;Norte</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="servicios" class="py-24 px-6 max-w-7xl mx-auto scroll-mt-24">
+        <div class="text-center mb-16 reveal">
+            <h2 class="text-3xl md:text-5xl font-bold mb-4 text-slate-900">Lo que incluye tu página</h2>
+            <p class="text-slate-600 text-lg">Todo lo necesario para tener presencia online seria, sin pagar de más.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="glass card reveal p-8 rounded-3xl">
+                <div class="card-ico bg-indigo-100 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 text-indigo-600">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-pen"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 text-slate-900">Diseño a medida</h3>
+                <p class="text-slate-600 leading-relaxed mb-6">
+                    Una web limpia y moderna, adaptada a tu rubro y a lo que ofreces. Nada de plantillas genéricas.
+                </p>
+                <ul class="space-y-3 text-slate-700">
+                    <li class="flex items-center gap-3"><svg class="w-5 h-5 shrink-0 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-droplet"/></svg>Colores y estilo de tu marca</li>
+                    <li class="flex items-center gap-3"><svg class="w-5 h-5 shrink-0 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-sparkles"/></svg>Diseño único, sin plantillas</li>
+                    <li class="flex items-center gap-3"><svg class="w-5 h-5 shrink-0 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-layers"/></svg>Secciones según tu negocio</li>
+                </ul>
+            </div>
+
+            <div class="glass card reveal p-8 rounded-3xl">
+                <div class="card-ico bg-violet-100 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 text-violet-600">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-phone-app"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 text-slate-900">Rápida y responsive</h3>
+                <p class="text-slate-600 leading-relaxed mb-6">
+                    Carga veloz y se ve perfecta en el celular, que es donde la mayoría de tus clientes te encuentra.
+                </p>
+                <ul class="space-y-3 text-slate-700">
+                    <li class="flex items-center gap-3"><svg class="w-5 h-5 shrink-0 text-violet-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-gauge"/></svg>Carga en segundos</li>
+                    <li class="flex items-center gap-3"><svg class="w-5 h-5 shrink-0 text-violet-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-phone-app"/></svg>Perfecta en celular y desktop</li>
+                    <li class="flex items-center gap-3"><svg class="w-5 h-5 shrink-0 text-violet-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-search"/></svg>Lista para Google (SEO básico)</li>
+                </ul>
+            </div>
+
+            <div class="glass card reveal p-8 rounded-3xl">
+                <div class="card-ico bg-amber-100 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 text-amber-600">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-chat"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 text-slate-900">Lista para recibir clientes</h3>
+                <p class="text-slate-600 leading-relaxed mb-6">
+                    Cada visita puede convertirse en una consulta, sin fricción y por el canal que prefieras.
+                </p>
+                <ul class="space-y-3 text-slate-700">
+                    <li class="flex items-center gap-3"><svg class="w-5 h-5 shrink-0 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-phone"/></svg>Botón directo a WhatsApp</li>
+                    <li class="flex items-center gap-3"><svg class="w-5 h-5 shrink-0 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-mail"/></svg>Formulario de contacto</li>
+                    <li class="flex items-center gap-3"><svg class="w-5 h-5 shrink-0 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-share"/></svg>Enlaces a tus redes</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="proceso" class="py-24 px-6 max-w-5xl mx-auto scroll-mt-24">
+        <div class="text-center mb-16 reveal">
+            <h2 class="text-3xl md:text-5xl font-bold mb-4 text-slate-900">Cómo trabajamos</h2>
+            <p class="text-slate-600 text-lg">Tres pasos, sin tecnicismos y sin hacerte perder tiempo.</p>
+        </div>
+
+        <ol class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <li class="glass card reveal p-8 rounded-3xl">
+                <div class="text-indigo-600 text-4xl font-extrabold mb-4">1</div>
+                <h3 class="text-xl font-bold mb-2 text-slate-900">Nos escribes</h3>
+                <p class="text-slate-600 leading-relaxed">Cuéntanos qué haces y qué necesitas. Te decimos si podemos ayudarte y cuánto sale, sin compromiso.</p>
+            </li>
+            <li class="glass card reveal p-8 rounded-3xl">
+                <div class="text-violet-600 text-4xl font-extrabold mb-4">2</div>
+                <h3 class="text-xl font-bold mb-2 text-slate-900">Armamos tu web</h3>
+                <p class="text-slate-600 leading-relaxed">Diseñamos la página con tus textos e imágenes y la ajustamos contigo hasta que quede como quieres.</p>
+            </li>
+            <li class="glass card reveal p-8 rounded-3xl">
+                <div class="text-amber-600 text-4xl font-extrabold mb-4">3</div>
+                <h3 class="text-xl font-bold mb-2 text-slate-900">Sale online</h3>
+                <p class="text-slate-600 leading-relaxed">Publicamos tu web y queda funcionando, lista para que te empiecen a llegar consultas.</p>
+            </li>
+        </ol>
+    </section>
+
+    <section id="contacto" class="py-24 relative scroll-mt-24">
+        <div class="max-w-4xl mx-auto text-center px-6 glass rounded-3xl p-12 shadow-xl reveal">
+            <h2 class="text-4xl font-bold mb-6 text-slate-900">Hablemos de tu página</h2>
+            <p class="text-xl text-slate-600 mb-10">
+                Escríbenos por donde te quede más cómodo. Te respondemos personalmente y te pasamos un presupuesto claro, sin letra chica.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8">
+                <a href="mailto:hola@weblista.com" class="flex items-center gap-3 bg-slate-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-slate-800 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-mail"/></svg>
+                    <span>Escríbenos por mail</span>
+                </a>
+                <a href="https://instagram.com/weblista" target="_blank" rel="noopener" class="shine flex items-center gap-3 bg-gradient-to-r from-violet-500 to-pink-500 text-white px-8 py-4 rounded-xl font-bold hover:opacity-90 transition glow">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-instagram"/></svg>
+                    <span>Mándanos un DM</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <footer class="text-center py-8 text-slate-600 text-sm border-t border-slate-200 mt-10">
+        <p>&copy; 2026 WebLista. Páginas web profesionales, sin vueltas.</p>
+    </footer>
+
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <div id="contact-pop" role="dialog" aria-label="Contacto rápido" aria-hidden="true"
+             class="glass w-72 rounded-2xl mb-4 overflow-hidden pop-closed shadow-xl">
+            <div class="bg-indigo-600 p-4 text-white flex justify-between items-center">
+                <span class="font-bold">¿Hablamos?</span>
+                <button onclick="togglePop()" class="text-white hover:text-indigo-100" aria-label="Cerrar contacto rápido">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-x"/></svg>
+                </button>
+            </div>
+            <div class="p-4 flex flex-col space-y-3 text-sm bg-white">
+                <p class="text-slate-600">Elige por dónde escribirnos:</p>
+                <a href="mailto:hola@weblista.com" class="flex items-center gap-3 bg-slate-100 hover:bg-slate-200 px-4 py-3 rounded-lg transition text-slate-800">
+                    <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-mail"/></svg><span>Mail</span>
+                </a>
+                <a href="https://instagram.com/weblista" target="_blank" rel="noopener" class="flex items-center gap-3 bg-slate-100 hover:bg-slate-200 px-4 py-3 rounded-lg transition text-slate-800">
+                    <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-instagram"/></svg><span>Instagram DM</span>
+                </a>
+            </div>
+        </div>
+
+        <button id="contact-toggle" onclick="togglePop()" aria-expanded="false" aria-controls="contact-pop"
+                aria-label="Abrir contacto rápido"
+                class="bg-indigo-600 hover:bg-indigo-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg glow transition-transform transform hover:scale-110">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-chat"/></svg>
+        </button>
+    </div>
+
+    <script>
+        function togglePop() {
+            const pop = document.getElementById('contact-pop');
+            const toggle = document.getElementById('contact-toggle');
+            const isOpen = pop.classList.contains('pop-open');
+            pop.classList.toggle('pop-open', !isOpen);
+            pop.classList.toggle('pop-closed', isOpen);
+            pop.setAttribute('aria-hidden', String(isOpen));
+            toggle.setAttribute('aria-expanded', String(!isOpen));
+        }
+        const nav = document.getElementById('nav');
+        const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 20);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        const reveals = document.querySelectorAll('.reveal');
+        if ('IntersectionObserver' in window) {
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach((e) => {
+                    if (e.isIntersecting) {
+                        const items = e.target.parentElement ? [...e.target.parentElement.querySelectorAll('.reveal')] : [e.target];
+                        e.target.style.transitionDelay = (Math.max(0, items.indexOf(e.target)) * 0.08) + 's';
+                        e.target.classList.add('in');
+                        io.unobserve(e.target);
+                    }
+                });
+            }, { threshold: 0.15 });
+            reveals.forEach(el => io.observe(el));
+        } else {
+            reveals.forEach(el => el.classList.add('in'));
+        }
+    </script>
+</body>
+</html>
